@@ -36,6 +36,6 @@ public class FileLocationService {
     }
 
     public ResponseFile[] getAllFiles(){
-        return fileDbRepository.findAll().stream().map(file -> new ResponseFile(file.getId(), file.getName(), file.getUri())).toArray(ResponseFile[]::new);
+        return fileDbRepository.findAll().stream().map(file -> new ResponseFile(file.getId(), file.getName())).toArray(ResponseFile[]::new);
     }
 }

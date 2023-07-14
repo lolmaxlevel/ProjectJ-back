@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@CrossOrigin
 class FileController {
 
     private final FileLocationService fileLocationService;
@@ -33,7 +34,7 @@ class FileController {
         return fileLocationService.find(fileId);
     }
 
-    @GetMapping(value = "/all-files/")
+    @GetMapping(value = "/all-files")
     ResponseFile[] getAllFiles(){
         return fileLocationService.getAllFiles();
     }
