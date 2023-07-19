@@ -19,13 +19,20 @@ public class File {
 
     private String name;
 
+    private String description;
+
 //    private String type;
 
     private String uri;
 
-    public File(String fileName, String location) {
+    public File(String fileName, String location, String description) {
         this.name = fileName;
         this.uri = location;
+        this.description = description;
     }
-
+    public File(Long id,String fileName, String description) {
+        this.id = id;
+        this.name = fileName;
+        this.description = description;
+    }
 }

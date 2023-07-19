@@ -11,5 +11,4 @@ import lombok.Setter;
 public class ResponseFile {
     private Long id;
     private String name;
-
 }

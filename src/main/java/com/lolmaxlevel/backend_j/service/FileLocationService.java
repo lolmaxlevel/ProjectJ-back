@@ -2,7 +2,6 @@ package com.lolmaxlevel.backend_j.service;
 
 import com.lolmaxlevel.backend_j.model.File;
 
-import com.lolmaxlevel.backend_j.model.ResponseFile;
 import com.lolmaxlevel.backend_j.repository.FileDbRepository;
 import com.lolmaxlevel.backend_j.repository.FileSystemRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +21,10 @@ public class FileLocationService {
         this.fileDbRepository = fileDbRepository;
     }
 
-    public void save(byte[] bytes, String fileName) throws Exception {
+    public File save(byte[] bytes, String fileName, String description) throws Exception {
         String location = fileSystemRepositoryImpl.save(bytes, fileName);
 
-        fileDbRepository.save(new File(fileName, location));
+        return fileDbRepository.save(new File(fileName, location, description));
     }
 
     public FileSystemResource find(Long fileId) {
@@ -35,7 +34,19 @@ public class FileLocationService {
         return fileSystemRepositoryImpl.findInFileSystem(file.getUri());
     }
 
-    public ResponseFile[] getAllFiles(){
-        return fileDbRepository.findAll().stream().map(file -> new ResponseFile(file.getId(), file.getName())).toArray(ResponseFile[]::new);
+    public File[] getAllFiles(){
+        return fileDbRepository.findAll().stream().map(file -> new File(file.getId(), file.getName(), file.getDescription())).toArray(File[]::new);
+    }
+    public String deleteFile(Long id){
+        fileDbRepository.deleteById(id);
+        return "Deleted";
+    }
+    public String updateFile(Long id, String name, String description){
+        File file = fileDbRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        file.setName(name);
+        file.setDescription(description);
+        fileDbRepository.save(file);
+        return "Updated";
     }
 }
