@@ -10,8 +10,7 @@ import java.util.Date;
 
 
 @Repository
-public
-class FileSystemRepositoryImpl {
+public class FileSystemRepositoryImpl implements FileSystemRepository{
 
     String RESOURCES_DIR = "C:\\aboba\\files\\";
 
@@ -34,6 +33,12 @@ class FileSystemRepositoryImpl {
         }
     }
 
-
-
+    public void deleteFile(FileSystemResource file){
+        try {
+            Files.delete(Paths.get(file.getPath()));
+        } catch (Exception e) {
+            // Handle access or file not found problems.
+            throw new RuntimeException();
+        }
+    }
 }

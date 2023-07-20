@@ -21,15 +21,16 @@ public class FileLocationService {
         this.fileDbRepository = fileDbRepository;
     }
 
-    public File save(byte[] bytes, String fileName, String description) throws Exception {
+    public File save(byte[] bytes, String fileName, String name, String description) throws Exception {
         String location = fileSystemRepositoryImpl.save(bytes, fileName);
 
-        return fileDbRepository.save(new File(fileName, location, description));
+        return fileDbRepository.save(new File(name, location, description));
     }
 
     public FileSystemResource find(Long fileId) {
         File file = fileDbRepository.findById(fileId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
 
         return fileSystemRepositoryImpl.findInFileSystem(file.getUri());
     }
@@ -38,6 +39,7 @@ public class FileLocationService {
         return fileDbRepository.findAll().stream().map(file -> new File(file.getId(), file.getName(), file.getDescription())).toArray(File[]::new);
     }
     public String deleteFile(Long id){
+        fileSystemRepositoryImpl.deleteFile(this.find(id));
         fileDbRepository.deleteById(id);
         return "Deleted";
     }

@@ -6,4 +6,6 @@ public interface FileSystemRepository {
     String save(byte[] content, String fileName) throws Exception;
 
     FileSystemResource findInFileSystem(String location);
+
+    void deleteFile(FileSystemResource file);
 }
