@@ -1,10 +1,11 @@
 package com.lolmaxlevel.backend_j.controller;
 
 import com.lolmaxlevel.backend_j.model.File;
-import com.lolmaxlevel.backend_j.model.ResponseMessage;
-import com.lolmaxlevel.backend_j.model.UploadResponse;
+import com.lolmaxlevel.backend_j.dto.ResponseMessage;
+import com.lolmaxlevel.backend_j.dto.UploadResponse;
 import com.lolmaxlevel.backend_j.service.FileLocationService;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 
+@Slf4j
 @RestController
-@CrossOrigin(origins = "http://localhost:5173/", exposedHeaders = "Content-Disposition")
 class FileController {
 
     private final FileLocationService fileLocationService;
@@ -27,6 +28,7 @@ class FileController {
     UploadResponse uploadImage(@RequestParam("file") MultipartFile file,
                                 @RequestParam("description") String description,
                                 @RequestParam("name") String name) {
+        log.info("Upload request: {}", file.getOriginalFilename());
         try {
             File new_file = fileLocationService.save(file.getBytes(), file.getOriginalFilename(), name, description);
             return new UploadResponse("Uploaded the file successfully!",
@@ -38,6 +40,7 @@ class FileController {
 
     @GetMapping(value = "/files/{fileId}", produces = MediaType.APPLICATION_PDF_VALUE)
     FileSystemResource downloadFile(@PathVariable Long fileId, HttpServletResponse response){
+        log.info("Download request: {}", fileId);
         String fileName =
                 Objects.requireNonNull(fileLocationService.find(fileId).getFilename()).split("-",2)[1];
         response.addHeader("Content-Disposition", "attachment; filename="+fileName);
@@ -46,14 +49,17 @@ class FileController {
 
     @GetMapping(value = "/all-files")
     File[] getAllFiles(){
+        log.info("Get all files request");
         return fileLocationService.getAllFiles();
     }
     @PostMapping(value = "/delete-file")
     ResponseMessage deleteFile(@RequestParam Long id){
+        log.info("Delete request: {}", id);
         return new ResponseMessage(fileLocationService.deleteFile(id));
     }
-    @PostMapping(value = "/update-file")
+    @PutMapping(value = "/update-file")
     ResponseMessage updateFile(@RequestParam Long id, @RequestParam String name, @RequestParam String description){
+        log.info("Update request: {}", id);
         return new ResponseMessage(fileLocationService.updateFile(id, name, description));
     }
 

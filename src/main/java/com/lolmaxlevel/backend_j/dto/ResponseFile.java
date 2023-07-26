@@ -1,4 +1,4 @@
-package com.lolmaxlevel.backend_j.model;
+package com.lolmaxlevel.backend_j.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
