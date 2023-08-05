@@ -4,6 +4,7 @@ import com.lolmaxlevel.backend_j.model.File;
 import com.lolmaxlevel.backend_j.dto.ResponseMessage;
 import com.lolmaxlevel.backend_j.dto.UploadResponse;
 import com.lolmaxlevel.backend_j.service.FileLocationService;
+import com.lolmaxlevel.backend_j.utils.StringUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
@@ -43,6 +44,7 @@ class FileController {
         log.info("Download request: {}", fileId);
         String fileName =
                 Objects.requireNonNull(fileLocationService.find(fileId).getFilename()).split("-",2)[1];
+        fileName = StringUtils.convertCyrilic(fileName.toLowerCase());
         response.addHeader("Content-Disposition", "attachment; filename="+fileName);
         return fileLocationService.find(fileId);
     }
