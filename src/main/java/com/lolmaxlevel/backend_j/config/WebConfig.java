@@ -30,6 +30,7 @@ public class WebConfig {
                 HttpHeaders.CONTENT_TYPE,
                 HttpHeaders.ACCEPT
         ));
+        
         config.setExposedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,

@@ -17,6 +17,7 @@ import java.util.Objects;
 
 @Slf4j
 @RestController
+@RequestMapping("api/files")
 class FileController {
 
     private final FileLocationService fileLocationService;
@@ -39,7 +40,7 @@ class FileController {
         }
     }
 
-    @GetMapping(value = "/files/{fileId}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/file/{fileId}", produces = MediaType.APPLICATION_PDF_VALUE)
     FileSystemResource downloadFile(@PathVariable Long fileId, HttpServletResponse response){
         log.info("Download request: {}", fileId);
         String fileName =

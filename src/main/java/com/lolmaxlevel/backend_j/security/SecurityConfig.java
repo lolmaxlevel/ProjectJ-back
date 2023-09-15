@@ -24,6 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -35,14 +36,20 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.POST,"/register", "/login", "/refresh").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/all-files", "/files/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/auth/register",
+                                "/api/auth/login",
+                                "/api/auth/refresh").permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/files/all-files",
+                                "/api/files/file/**",
+                                "api/school/all-materials").permitAll()
                         .anyRequest()
                         .authenticated()
                         .and()
                         .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 )
-               ;
+        ;
 
 
         return http.build();
